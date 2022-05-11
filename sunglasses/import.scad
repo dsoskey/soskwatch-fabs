@@ -8,56 +8,58 @@ module reference() {
 }
 
 module funky_stuff(
-  // Could this be frameThickness and be used in lens cutout?
+  // major dimenions
+  // TODO: how does this relate to connectors
+  length = 143.6,
+  height = 53.5,
   frameThickness = 3,
-  noseTop = 12,
+  //minor dimensions
+  frameTop = 20,
+  noseTop = 10,
   noseBottom = 4.25,
-  frameTop = 15,
-  frameTopRight = 57,
+  frameTopRight = 58,
   connectorRight = 68,
   frameLeftX = 4,
   frameLeftY = 3.5,
-  frameBottomLeftX = 23,
+  frameBottomLeftX = 27,
   frameRightX = 64,
   frameRightY = 5,
-  frameBottom = -17,
   zThickness = 1,
 ) {
+  frameBottom = frameTop - height;
+  frameRightX = length / 2 - 1; // TODO: remove -1 from this number?
 
   topMiddle = [0, noseTop];
+
   r1 = [frameLeftX + 1, noseTop];
   /* TODO: name ur[0] */
   ur = [17, frameTop];
   r2 = [frameTopRight, frameTop];
-  rd = [connectorRight, frameTop - 2];
-  d = [connectorRight, frameTop - 8];
   ld1 = [frameRightX, frameRightY];
   ld2 = [frameRightX + 1, -10];
   ld3 = [frameRightX - 10, frameBottom];
   l1 = [frameBottomLeftX, frameBottom];
   ul1 = [10, -10];
   ul2 = [frameLeftX, frameLeftY];
+
   ul3 = [2, noseBottom];
   l2 = [0, noseBottom];
 
   nosePoints = [topMiddle,r1,ul2,ul3,l2];
 
   framePoints = [
-    /* topMiddle, */
     r1,
     ur,
     r2,
-    /* rd,d, */
     ld1,
     ld2,
     ld3,
     l1,
     ul1,
     ul2,
-    /* ul3 */
   ];
 
-  bridgeTop = frameTop - 1;
+  bridgeTop = frameTop - 1.5;
   bridgeBottom = bridgeTop - frameThickness;
   bridgePoints = [
     [0, bridgeTop],
@@ -66,7 +68,7 @@ module funky_stuff(
     [0, bridgeBottom]
   ];
 
-  connectorPoints = [r2, rd, d, ld1];
+
   lensStart = [r1[0] + 2 * frameThickness / 3, noseTop - 2 * frameThickness / 3];
   Lur = [ur[0], frameTop - frameThickness];
   Lr = [frameTopRight - 2 * frameThickness / 3, frameTop - frameThickness];
@@ -83,10 +85,8 @@ module funky_stuff(
     difference() {
       linear_extrude(height = zThickness) {
         polygon(points=bridgePoints);
-
         polygon(points=nosePoints);
         polygon(points=framePoints);
-        /* polygon(points=connectorPoints); */
       }
       translate([0, 0, -1])
       linear_extrude(height = zThickness * 10)
@@ -94,13 +94,8 @@ module funky_stuff(
     }
 }
 
+height = 46;
 /* reference(); */
 translate([0,0,1]) {
-  funky_stuff(zThickness = 4,
-    noseTop = 10,
-    frameTop = 20,
-    frameBottom = -26,
-    frameTopRight = 58,
-    frameRightX = 68
-  );
+  funky_stuff(zThickness = 4);
 }
