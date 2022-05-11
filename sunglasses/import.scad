@@ -9,8 +9,7 @@ module reference() {
 
 module funky_stuff(
   // Could this be frameThickness and be used in lens cutout?
-  bridgeThickness = 1.5,
-
+  frameThickness = 3,
   noseTop = 12,
   noseBottom = 4.25,
   frameTop = 15,
@@ -59,7 +58,7 @@ module funky_stuff(
   ];
 
   bridgeTop = frameTop - 1;
-  bridgeBottom = bridgeTop - bridgeThickness;
+  bridgeBottom = bridgeTop - frameThickness;
   bridgePoints = [
     [0, bridgeTop],
     [ur[0], bridgeTop],
@@ -68,17 +67,18 @@ module funky_stuff(
   ];
 
   connectorPoints = [r2, rd, d, ld1];
-  lensStart = [r1[0] + 1, noseTop - 1];
-  Lur = [ur[0], frameTop - 1.5];
-  Lr = [frameTopRight - 1, frameTop - 1.5];
-  Ldr = [frameRightX - 1.5, frameRightY - .4];
-  Ldr2 = [frameRightX - .5, ld2[1]];
-  Ldl = [ld3[0] - .5, frameBottom + 1.5];
-  Ll = [frameBottomLeftX + .5, frameBottom + 1.5];
-  Lul = [ul1[0] + 1, ul1[1] + 1];
-  Lul2 = [frameLeftX + 1.5, frameLeftY + .5];
+  lensStart = [r1[0] + 2 * frameThickness / 3, noseTop - 2 * frameThickness / 3];
+  Lur = [ur[0], frameTop - frameThickness];
+  Lr = [frameTopRight - 2 * frameThickness / 3, frameTop - frameThickness];
+  Ldr = [frameRightX - frameThickness, frameRightY - frameThickness / 3.5];
+  Ldr2 = [frameRightX - 5 / 8 * frameThickness, ld2[1] + frameThickness / 3];
+  Ldl = [ld3[0] - frameThickness / 3, frameBottom + frameThickness];
+  Ll = [frameBottomLeftX + frameThickness / 3, frameBottom + frameThickness];
+  Lul = [ul1[0] + 2 * frameThickness / 3, ul1[1] + 2 * frameThickness / 3];
+  Lul2 = [frameLeftX + frameThickness, frameLeftY + frameThickness / 3];
   lensCutoutPoints = [lensStart, Lur, Lr, Ldr, Ldr2, Ldl, Ll, Lul, Lul2];
 
+  color("green")
   mirror_copy()
     difference() {
       linear_extrude(height = zThickness) {
@@ -96,10 +96,11 @@ module funky_stuff(
 
 /* reference(); */
 translate([0,0,1]) {
-  funky_stuff(zThickness = 3,
+  funky_stuff(zThickness = 4,
     noseTop = 10,
-    frameTop = 17,
-    frameBottom = -24,
-    frameTopRight = 55
+    frameTop = 20,
+    frameBottom = -26,
+    frameTopRight = 58,
+    frameRightX = 68
   );
 }
