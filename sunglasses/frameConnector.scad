@@ -11,20 +11,14 @@ module frameConnectorCubes(
   translate([-radius/2, -radius/2, 0])
     cube([radius,radius, width], center=true);
 }
-module frameConnectorBase(
+module frameConnector(
   radius,
-  width = 2.15,
+  width = 4.1,
+  innerRadiusRatio=1.9
 ) {
-  donut(radius=radius, width=width, innerRadius=radius/1.9)
+  donut(radius=radius, width=width, innerRadius=radius/innerRadiusRatio)
   frameConnectorCubes(radius, width);
 }
 
-module frameConnector(
-  radius,
-  width=4.1,
-) {
-  // TODO: should i subtract a middle donut from a longer donut instead of two smalls?
-  frameConnectorBase(radius, width);
-}
 /* if (false) */
-frameConnector(radius=2);
+frameConnector(radius=2, innerRadiusRatio=1.4);
