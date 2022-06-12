@@ -1,4 +1,4 @@
-include <config/3d_printer.scad>;
+include <config/3DPrinter.scad>;
 
 module earCutout(
   earCutoutRadius,

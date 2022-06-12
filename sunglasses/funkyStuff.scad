@@ -1,4 +1,4 @@
-include <config/3d_printer.scad>;
+include <config/3DPrinter.scad>;
 include <BOSL2/std.scad>;
 
 include <framePoints.scad>;
@@ -122,6 +122,7 @@ zThickness = 4;
 frameTop = 20;
 noseTop = 10;
 frameTopRight = 58;
+// nose
 frameLeftX = 4;
 frameLeftY = 3.5;
 frameBottomLeftX = 27;
@@ -129,6 +130,7 @@ frameRightY = 5;
 
 framePoints = generateFramePoints(
   length = length,
+  height = height,
   frameTop = frameTop,
   noseTop = noseTop,
   frameTopRight = frameTopRight,

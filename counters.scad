@@ -1,5 +1,5 @@
-include <config/3d_printer.scad>;
-use <rounded_cube.scad>;
+include <config/3DPrinter.scad>;
+use <roundedCube.scad>;
 
 module wallOfRootsFace(
   size,
