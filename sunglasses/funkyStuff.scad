@@ -1,7 +1,7 @@
 include <config/3DPrinter.scad>;
 include <BOSL2/std.scad>;
 
-include <framePoints.scad>;
+use <framePoints.scad>;
 use <mirrorCopy.scad>;
 use <donut.scad>;
 use <earpiece.scad>;
@@ -9,15 +9,14 @@ use <frameConnector.scad>;
 use <lensInset.scad>;
 
 module reference() {
-  color("blue") {
-    import("/Users/asks/Documents/OpenSCAD/sunglasses/DG_Frame_1_v2_v_rebuilt.stl");
-  }
+  color("blue")
+  import("./DG_Frame_1_v2_v_rebuilt.stl");
 }
 
 module earpieceConnector(
   earpieceConnectorThickness=4.1,
   radius,
-  bodyLength=91.3 + 20,
+  bodyLength=91.3 + 30,
   bodyThickness=3,
   clearance = 0.25,
 ) {
@@ -83,7 +82,7 @@ module funkyStuff(
     translate([70.14, -.1, -connectorDonutRadius])
     rotate([86.2, 90, 0]) {
       color(frameColor, .69)
-      frameConnector(radius=connectorDonutRadius, width=4.1);
+      frameConnector(radius=connectorDonutRadius, width=4.1, innerRadiusRatio=2);
       if (showEarpiece)
         color(frameColor, .69)
         earpieceConnector(radius=connectorDonutRadius);
@@ -140,7 +139,7 @@ framePoints = generateFramePoints(
   frameRightY = frameRightY
 );
 
-if (false)
+//if (false)
 mirrorCopy([0,0,1])
 translate([0,0,7])
 earpieceConnector(radius=frameThickness * 2 / 3);
@@ -149,17 +148,17 @@ translate([0,0,1])
 rotate([90,0,90]) {
 //  reference();
 
-//  if (false)
+  if (false)
   funkyStuff(
     framePoints=framePoints,
     frameThickness=frameThickness,
     zThickness=zThickness,
-    showEarpiece=true
+    showEarpiece=false
   );
 
-//  if (false)
+  if (false)
   mirrorCopy()
-  color("DeepSkyBlue",.1)
+  color("Gold",.4)
     translate([0, 0, (zThickness)/2])
       lensInset(
         framePoints=offsetF(framePoints, r=-frameThickness),

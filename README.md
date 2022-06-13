@@ -2,14 +2,14 @@
 
 soskwatch-fabs is my personal 3d modeling and fabrication catalogue
 
-## prerequisites / what i use
+## development
+
+### prerequisites / what i use
 
 - [OpenSCAD](https://openscad.org/) for rendering models
 - [BOSL2](https://github.com/revarbat/BOSL2)
 - [Cura](https://ultimaker.com/software/ultimaker-cura) for compiling gcode
 - [Ender 3](https://www.crealityofficial.co.uk/products/official-creality-ender-3-3d-printer) for printing
-
-## development
 
 ### getting started
 
