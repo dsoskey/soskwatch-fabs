@@ -13,12 +13,15 @@ module frameConnectorCubes(
 }
 module frameConnector(
   radius,
-  width = 4.1,
-  innerRadiusRatio=1.9
+  width,
+  innerRadius,
 ) {
-  donut(radius=radius, width=width, innerRadius=radius/innerRadiusRatio)
+  donut(radius=radius, width=width, innerRadius=innerRadius)
   frameConnectorCubes(radius, width);
 }
 
-/* if (false) */
-frameConnector(radius=2, innerRadiusRatio=1.4);
+frameConnector(
+  radius=2,
+  innerRadius=1.4,
+  width=4.1
+);

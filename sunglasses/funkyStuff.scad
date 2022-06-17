@@ -16,6 +16,7 @@ module reference() {
 module earpieceConnector(
   earpieceConnectorThickness=4.1,
   radius,
+  innerRadius,
   bodyLength=91.3 + 30,
   bodyThickness=3,
   clearance = 0.25,
@@ -23,10 +24,11 @@ module earpieceConnector(
   difference() {
     donut(
       radius=radius,
-      width=earpieceConnectorThickness + 5
+      width=earpieceConnectorThickness + 5,
+      innerRadius=innerRadius
     ) {
       zcenter = -earpieceConnectorThickness / 2;
-      translate([bodyLength + radius * 1.31, 0, 0])
+      translate([bodyLength + radius, 0, 0])
       rotate([-90,0,0])
       mirror([1,0,0])
       linear_extrude(bodyThickness)
@@ -43,10 +45,10 @@ module earpieceConnector(
 
 module funkyStuff(
   framePoints,
+  nosePoints,
   // major dimenions
   // TODO: how does this relate to connectors
   length = 143.6,
-  height = 53.5,
   frameThickness = 3,
   lensThickness = .5,
   zThickness = 4,
@@ -54,19 +56,7 @@ module funkyStuff(
   frameColor = "orange",
   //minor dimensions
   frameTop = 20,
-  noseTop = 10,
-  noseBottom = 4.25,
-  connectorRight = 68,
 ) {
-  nosePoints = [
-    [0, noseTop],
-    framePoints[0],
-    framePoints[8],
-    // TODO: define 2
-    [2, noseBottom],
-    [0, noseBottom]
-  ];
-
   bridgeTop = frameTop - 1.5;
   bridgeBottom = bridgeTop - frameThickness;
   bridgePoints = [
@@ -77,19 +67,21 @@ module funkyStuff(
   ];
 
   mirrorCopy() {
-    connectorDonutRadius = frameThickness * 2 / 3;
+    connectorDonutRadius = frameThickness * .8;
+    innerRadius = 1;
+
     // TODO: derive translate and rotate from length and close points
-    translate([70.14, -.1, -connectorDonutRadius])
+    translate([69.25 + connectorDonutRadius / 2, -.1, -connectorDonutRadius])
     rotate([86.2, 90, 0]) {
-      color(frameColor, .69)
-      frameConnector(radius=connectorDonutRadius, width=4.1, innerRadiusRatio=2);
+      color(frameColor)
+      frameConnector(radius=connectorDonutRadius, width=4.1);
       if (showEarpiece)
-        color(frameColor, .69)
+        color(frameColor)
         earpieceConnector(radius=connectorDonutRadius);
     }
 
     difference() {
-      color(frameColor, .69)
+      color(frameColor)
       linear_extrude(height = zThickness) {
         difference() {
           union() {
@@ -112,6 +104,8 @@ module funkyStuff(
   }
 }
 
+noseWidth = 8;
+noseHeight = 20;
 frameThickness = 3;
 length = 143.6;
 height = 53.5;
@@ -120,40 +114,42 @@ zThickness = 4;
 //minor dimensions
 frameTop = 20;
 noseTop = 10;
-frameTopRight = 58;
 // nose
-frameLeftX = 4;
 frameLeftY = 3.5;
-frameBottomLeftX = 27;
-frameRightY = 5;
+
+nosePoints = generateNosePoints(
+  noseTop = noseTop,
+  noseBottom = 4.25,
+  noseWidth = noseWidth
+);
+echo(nosePoints);
 
 framePoints = generateFramePoints(
   length = length,
   height = height,
+  nosePoints = nosePoints,
   frameTop = frameTop,
   noseTop = noseTop,
-  frameTopRight = frameTopRight,
-  frameLeftX = frameLeftX,
-  frameLeftY = frameLeftY,
-  frameBottomLeftX = frameBottomLeftX,
-  frameRightY = frameRightY
+  noseHeight = noseHeight,
+  noseWidth = noseWidth
 );
 
-//if (false)
+if (false)
 mirrorCopy([0,0,1])
 translate([0,0,7])
-earpieceConnector(radius=frameThickness * 2 / 3);
+earpieceConnector(radius=frameThickness * .8, innerRadius=1);
 
 translate([0,0,1])
 rotate([90,0,90]) {
 //  reference();
 
-  if (false)
+//  if (false)
   funkyStuff(
     framePoints=framePoints,
+    nosePoints=nosePoints,
     frameThickness=frameThickness,
     zThickness=zThickness,
-    showEarpiece=false
+    showEarpiece=true
   );
 
   if (false)
