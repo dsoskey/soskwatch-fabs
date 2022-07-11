@@ -1,4 +1,3 @@
-use <mirrorCopy.scad>;
 use <hedron.scad>;
 
 module lensInset(
@@ -16,13 +15,11 @@ module lensInset(
 framePoints = [ [10, 0], [0, 10], [-10, 0], [0, -10] ];
 
 deg=$t*360;
-highPass=.2;
-limited=$t-highPass < highPass ? highPass : $t;
-alpha=.25 * sin(deg) + .5;
+hexValue=.25 * sin(deg) + .5;
 
-echo(alpha);
+echo(hexValue);
 rotate([deg, deg, deg])
-color([1-alpha, 0, 0.5]) {
+color([1-hexValue, 0, 0.5]) {
   lensInset(framePoints=framePoints);
   rotate([90,0,0])
   lensInset(framePoints=framePoints);
