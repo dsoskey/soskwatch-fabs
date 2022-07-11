@@ -1,16 +1,5 @@
 use <mirrorCopy.scad>;
-
-module hedron(radius) {
-  hyp = (radius ^ 2 + radius ^ 2) ^ .5;
-  rotate([0,0,45])
-  mirrorCopy([0,0,-1])
-  polyhedron(
-  points=[ [radius,radius,0],[radius,-radius,0],[-radius,-radius,0],[-radius,radius,0], // the four points at base
-           [0,0,hyp]  ],                                 // the apex point
-  faces=[ [0,1,4],[1,2,4],[2,3,4],[3,0,4],              // each triangle side
-          [1,0,3],[2,1,3] ]                         // two triangles for square base
- );
-}
+use <hedron.scad>;
 
 module lensInset(
   framePoints,
@@ -19,16 +8,24 @@ module lensInset(
   hull() {
     for(point = framePoints) {
       translate([point[0], point[1]])
-      hedron(radius=radius);
+      octohedron(radius=radius);
     }
   }
 }
 
-//if (false)
-lensInset(
-  framePoints = [[10, 10], [20,0], [5, -20] ]
-);
+framePoints = [ [10, 0], [0, 10], [-10, 0], [0, -10] ];
 
-//if (false)
-color("DeepPink")
-hedron(radius=25);
+deg=$t*360;
+highPass=.2;
+limited=$t-highPass < highPass ? highPass : $t;
+alpha=.25 * sin(deg) + .5;
+
+echo(alpha);
+rotate([deg, deg, deg])
+color([1-alpha, 0, 0.5]) {
+  lensInset(framePoints=framePoints);
+  rotate([90,0,0])
+  lensInset(framePoints=framePoints);
+  rotate([0,90,0])
+  lensInset(framePoints=framePoints);
+}
