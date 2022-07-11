@@ -1,23 +1,23 @@
 include <config/3DPrinter.scad>;
 include <BOSL2/std.scad>;
-
-use <framePoints.scad>;
 use <mirrorCopy.scad>;
 use <donut.scad>;
-use <earpiece.scad>;
-use <frameConnector.scad>;
-use <lensInset.scad>;
+
+use <framePoints.scad>;
+use <../earpiece.scad>;
+use <../frameConnector.scad>;
+use <../lensInset.scad>;
 
 module reference() {
   color("blue")
-  import("./DG_Frame_1_v2_v_rebuilt.stl");
+  import("../DG_Frame_1_v2_v_rebuilt.stl");
 }
 
 module earpieceConnector(
   earpieceConnectorThickness=4.1,
   radius,
   innerRadius,
-  bodyLength=91.3 + 30,
+  bodyLength=129,
   bodyThickness=3,
   clearance = 0.25,
 ) {
@@ -28,14 +28,15 @@ module earpieceConnector(
       innerRadius=innerRadius
     ) {
       zcenter = -earpieceConnectorThickness / 2;
-      translate([bodyLength + radius, 0, 0])
+      translate([bodyLength - radius, 0, 0])
       rotate([-90,0,0])
       mirror([1,0,0])
       linear_extrude(bodyThickness)
         earpiece(
           tipRadius=6.15,
           bodyLength=bodyLength,
-          earLength=40 - 6.15
+          earLength=40 - 6.15,
+          earAngle=45
         );
     }
     cylinder(r=radius + clearance, h=earpieceConnectorThickness + clearance, center=true);
@@ -68,7 +69,6 @@ module funkyStuff(
 
   mirrorCopy() {
     connectorDonutRadius = frameThickness * .8;
-    innerRadius = 1;
 
     // TODO: derive translate and rotate from length and close points
     translate([69.25 + connectorDonutRadius / 2, -.1, -connectorDonutRadius])
@@ -93,7 +93,8 @@ module funkyStuff(
             polygon(points=framePoints);
         }
       }
-
+      // noseInset TODO: maybe rename inset?
+      lensInset(framePoints=[nosePoints[4], nosePoints[3], nosePoints[2], framePoints[7]]);
       // lens inset
       translate([0, 0, (zThickness)/2])
       lensInset(
@@ -104,6 +105,7 @@ module funkyStuff(
   }
 }
 
+earpieceLength = 129;
 noseWidth = 8;
 noseHeight = 20;
 frameThickness = 3;
@@ -134,11 +136,6 @@ framePoints = generateFramePoints(
   noseWidth = noseWidth
 );
 
-if (false)
-mirrorCopy([0,0,1])
-translate([0,0,7])
-earpieceConnector(radius=frameThickness * .8, innerRadius=1);
-
 translate([0,0,1])
 rotate([90,0,90]) {
 //  reference();
@@ -149,7 +146,7 @@ rotate([90,0,90]) {
     nosePoints=nosePoints,
     frameThickness=frameThickness,
     zThickness=zThickness,
-    showEarpiece=true
+    showEarpiece=false
   );
 
   if (false)
@@ -158,6 +155,6 @@ rotate([90,0,90]) {
     translate([0, 0, (zThickness)/2])
       lensInset(
         framePoints=offsetF(framePoints, r=-frameThickness),
-        radius=.5
+        radius=.125
       );
 }
