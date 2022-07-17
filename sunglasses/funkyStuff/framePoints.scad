@@ -1,55 +1,50 @@
-function noseBottomY(noseTop, noseHeight) = noseTop - noseHeight;
+// This is the top of the nose piece, not the human nose
+// I'm thinking about changing this to be the human nose
+// One point of consideration: is the height of the nose piece constant?
+__TOP_OF_NOSE = [0,5.75];
 
 function frameLeftX(noseWidth) = noseWidth / 2;
 
-function frameTopRight(length) = length / 2 - 13.8;
+function frameTopY() = __TOP_OF_NOSE[1] + 10;
 
-function frameBottomY(top, height) = top - height;
+function frameBottomY(height) = frameTopY() - height;
 
-function frameBottomLeftX(frameLeftX) = frameLeftX + 23;
+function frameBottomRightX(length) = frameRightX(length) - 10;
 
-function frameRightX(length) = length / 2 - 1; // TODO: remove -1 from this number?
+function frameBottomLeftX(noseWidth) = frameLeftX(noseWidth) + 23;
 
-function frameRightY(frameTop) = frameTop - 15;
+function frameRightX(length) = length / 2;
+
+function frameTopRightX(length) = frameRightX(length) - 13.8;
 
 function bottomRightOffsetX(length) = frameRightX(length) - 10;
 
-
 function generateFramePoints (
-  // major dimenions
-  // TODO: how does this relate to connectors
   length,
   height,
   nosePoints,
   // the width of your nose where the glasses meet your nose
   noseWidth,
-  // TODO: Derive from where the glasses meet your nose. currently defined by top of nose piece
   noseHeight,
-  //minor dimensions
-  frameTop = 20,
-  noseTop = 10,
 ) = [
   nosePoints[1],
-  [frameLeftX(noseWidth) + 13, frameTop],
-  [frameTopRight(length), frameTop],
-  [frameRightX(length), frameRightY(frameTop)],
-  [frameRightX(length) + 1, noseBottomY(noseTop, noseHeight)],
-  [frameRightX(length) - 10, frameBottomY(frameTop, height)],
-  [frameBottomLeftX(frameLeftX(noseWidth)), frameBottomY(frameTop, height)],
-  [frameLeftX(noseWidth) + 6, noseBottomY(noseTop, noseHeight)],
+  [frameLeftX(noseWidth) + 13,  frameTopY()],
+  [frameTopRightX(length),      frameTopY()],
+  [frameRightX(length) - 1,     frameTopY() - 15],
+  // this[1] is why i want to change __TOP_OF_NOSE to be the human one. noseHeight isn't accurate to a human nose height
+  [frameRightX(length),         __TOP_OF_NOSE[1] - noseHeight],
+  [frameBottomRightX(length),   frameBottomY(height)],
+  [frameBottomLeftX(noseWidth), frameBottomY(height)],
+  [frameLeftX(noseWidth) + 6,   __TOP_OF_NOSE[1] - noseHeight],
   nosePoints[2],
 ];
 
 function generateNosePoints (
   noseWidth,
-  noseTop = 10,
-  noseBottom = 4.25,
-  frameLeftY = 3.5,
 ) = [
-  [0, noseTop],
-  [frameLeftX(noseWidth) + 1, noseTop],
-  [frameLeftX(noseWidth), frameLeftY],
-  // TODO: define 2
-  [2, noseBottom],
-  [0, noseBottom]
+  __TOP_OF_NOSE,
+  [frameLeftX(noseWidth) + 1, __TOP_OF_NOSE[1]],
+  [frameLeftX(noseWidth),     __TOP_OF_NOSE[1] - 6.5],
+  [__TOP_OF_NOSE[0] + 2,      __TOP_OF_NOSE[1] - 5.75],
+  [__TOP_OF_NOSE[0],          __TOP_OF_NOSE[1] - 5.75] // This Y coord is the true top of the nose. TODO: Redo this
 ];

@@ -21,4 +21,4 @@ soskwatch-fabs is my personal 3d modeling and fabrication catalogue
 ### style guide
 
 - prefer use over include when working with subcomponents to prevent accidentally rendering standalone subcomponents
-- when committing subcomponents to the repo, annotate standalone renders with `if (false)`
+- 

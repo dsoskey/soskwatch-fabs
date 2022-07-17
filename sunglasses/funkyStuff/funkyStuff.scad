@@ -4,7 +4,7 @@ use <mirrorCopy.scad>;
 use <donut.scad>;
 
 use <framePoints.scad>;
-use <../earpiece.scad>;
+use <earpiece.scad>;
 use <../frameConnector.scad>;
 use <../lensInset.scad>;
 
@@ -13,52 +13,18 @@ module reference() {
   import("../DG_Frame_1_v2_v_rebuilt.stl");
 }
 
-module earpieceConnector(
-  earpieceConnectorThickness=4.1,
-  radius,
-  innerRadius,
-  bodyLength=129,
-  bodyThickness=3,
-  clearance = 0.25,
-) {
-  difference() {
-    donut(
-      radius=radius,
-      width=earpieceConnectorThickness + 5,
-      innerRadius=innerRadius
-    ) {
-      zcenter = -earpieceConnectorThickness / 2;
-      translate([bodyLength - radius, 0, 0])
-      rotate([-90,0,0])
-      mirror([1,0,0])
-      linear_extrude(bodyThickness)
-        earpiece(
-          tipRadius=6.15,
-          bodyLength=bodyLength,
-          earLength=40 - 6.15,
-          earAngle=45
-        );
-    }
-    cylinder(r=radius + clearance, h=earpieceConnectorThickness + clearance, center=true);
-    frameConnectorCubes(radius + clearance, earpieceConnectorThickness + clearance);
-  }
-}
-
 module funkyStuff(
   framePoints,
   nosePoints,
-  // major dimenions
-  // TODO: how does this relate to connectors
-  length = 143.6,
   frameThickness = 3,
   lensThickness = .5,
   zThickness = 4,
-  showEarpiece = true,
+  showEarpiece,
   frameColor = "orange",
-  //minor dimensions
-  frameTop = 20,
+  connectorPinRadius = .6,
 ) {
-  bridgeTop = frameTop - 1.5;
+  noseTop = nosePoints[0][1];
+  bridgeTop = frameTopY() - 1.5;
   bridgeBottom = bridgeTop - frameThickness;
   bridgePoints = [
     [0, bridgeTop],
@@ -67,17 +33,18 @@ module funkyStuff(
     [0, bridgeBottom]
   ];
 
+  connectorY = noseTop - 10.1;
   mirrorCopy() {
-    connectorDonutRadius = frameThickness * .8;
+    connectorRadius = frameThickness * .8;
 
     // TODO: derive translate and rotate from length and close points
-    translate([69.25 + connectorDonutRadius / 2, -.1, -connectorDonutRadius])
+    translate([69.25 + connectorRadius / 2, connectorY, -connectorRadius])
     rotate([86.2, 90, 0]) {
       color(frameColor)
-      frameConnector(radius=connectorDonutRadius, width=4.1);
+      frameConnector(radius=connectorRadius, width=4.1, innerRadius=connectorPinRadius);
       if (showEarpiece)
         color(frameColor)
-        earpieceConnector(radius=connectorDonutRadius);
+        earpieceConnector(radius=connectorRadius, innerRadius=connectorPinRadius);
     }
 
     difference() {
@@ -105,51 +72,39 @@ module funkyStuff(
   }
 }
 
-earpieceLength = 129;
+assembled = false;
 noseWidth = 8;
 noseHeight = 20;
 frameThickness = 3;
 length = 143.6;
 height = 53.5;
 zThickness = 4;
-
-//minor dimensions
-frameTop = 20;
-noseTop = 10;
-// nose
-frameLeftY = 3.5;
+connectorPinRadius = .62;
 
 nosePoints = generateNosePoints(
-  noseTop = noseTop,
-  noseBottom = 4.25,
   noseWidth = noseWidth
 );
-echo(nosePoints);
 
 framePoints = generateFramePoints(
   length = length,
   height = height,
   nosePoints = nosePoints,
-  frameTop = frameTop,
-  noseTop = noseTop,
   noseHeight = noseHeight,
   noseWidth = noseWidth
 );
 
-translate([0,0,1])
-rotate([90,0,90]) {
-//  reference();
-
-//  if (false)
+translate([0, 0, 1])
+rotate([assembled ? 90 : 180, 0, 90]) {
   funkyStuff(
     framePoints=framePoints,
     nosePoints=nosePoints,
     frameThickness=frameThickness,
+    connectorPinRadius=connectorPinRadius,
     zThickness=zThickness,
-    showEarpiece=false
+    showEarpiece=assembled
   );
 
-  if (false)
+  if (assembled)
   mirrorCopy()
   color("Gold",.4)
     translate([0, 0, (zThickness)/2])
