@@ -79,7 +79,7 @@ frameThickness = 3;
 length = 143.6;
 height = 53.5;
 zThickness = 4;
-connectorPinRadius = .62;
+connectorPinRadius = .7;
 
 nosePoints = generateNosePoints(
   noseWidth = noseWidth

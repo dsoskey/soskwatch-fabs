@@ -9,6 +9,7 @@ autozoneEarLength = 118;
 bannyEarLength = 118;
 // TODO: Single source of truth
 frameThickness = 3;
+connectorPinRadius = .7;
 
 module earpieceConnector(
     earpieceConnectorThickness=4.1,
@@ -37,6 +38,7 @@ module earpieceConnector(
             );
         }
         cylinder(r=radius + clearance, h=earpieceConnectorThickness + clearance, center=true);
+        rotate([0, 0, 7.5])
         frameConnectorCubes(radius + clearance, earpieceConnectorThickness + clearance);
     }
 }
@@ -47,5 +49,5 @@ translate([0,0,7])
     earpieceConnector(
     bodyLength=bannyEarLength,
     radius=frameThickness * .8,
-    innerRadius=1
+    innerRadius=connectorPinRadius
 );
