@@ -38,16 +38,17 @@ module earpieceConnector(
             );
         }
         cylinder(r=radius + clearance, h=earpieceConnectorThickness + clearance, center=true);
-        rotate([0, 0, 7.5])
+        rotate([0, 0, 15])
         frameConnectorCubes(radius + clearance, earpieceConnectorThickness + clearance);
     }
 }
 
 rotate([270,0,0])
+//mirrorCopy([1,0,0])
 mirrorCopy([0,0,1])
-translate([0,0,7])
+translate([5,0,7])
     earpieceConnector(
-    bodyLength=bannyEarLength,
+    bodyLength=autozoneEarLength,
     radius=frameThickness * .8,
     innerRadius=connectorPinRadius
 );
