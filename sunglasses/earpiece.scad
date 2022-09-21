@@ -22,48 +22,49 @@ module earpiece(
   earAngle=45,
   cutoutAngle=45/2
 ) {
+  centerOfEarBottomX = -earLength * cos(earAngle);
+  earMeasurementPointX = centerOfEarBottomX + tipRadius - 1;
   difference() {
     union() {
       hull() {
         circle(r=tipRadius);
-        translate([-earLength * cos(earAngle), -earLength * sin(earAngle), 0])
-        circle(r=tipRadius);
+        translate([centerOfEarBottomX, -earLength * sin(earAngle), 0])
+          circle(r=tipRadius);
       }
       hull() {
         circle(r=tipRadius);
-        squareSize = tipRadius*1.5;
-        translate([bodyLength - squareSize / 2,0, 0])
-        square(size=squareSize, center=true);
+        squareSize = tipRadius * 1.5;
+        translate([earMeasurementPointX + bodyLength, 0, 0])
+          square(size=squareSize, center=true);
       }
     }
     hull()
       earCutout(earCutoutRadius=tipRadius * 2, earAngle=cutoutAngle);
   }
-
 }
 
-earAngel=45;
+earAngle=45;
 tipRadius=6.15;
-oldBodyLength = 124.3;
-bodyLength= 127.912;
-rightx = bodyLength + tipRadius * .75 - 1;
-echo(rightx);
-color("red") {
-  translate([-1,-10,0])
-    cube([1,20,5]);
+oldBodyLength = 127.912;
+bodyLength= oldBodyLength + 14.1731;
+testerBodyLength = 175;
+earLength = 40 - tipRadius;
 
-  translate([bodyLength-1,-10,0])
-    cube([1,20,5]);
+// measure from inside of red rectangle forward to get bodyLength
+color("red") {
+  translate([-earLength * cos(earAngle) + tipRadius - 2,-earLength + tipRadius + 3,0])
+    cube([2,earLength - tipRadius + 3,3]);
 }
 color("whitesmoke")
-translate([0, 0, -1])
+translate([0, 0, 0])
 linear_extrude(3)
   earpiece(
     tipRadius=6.15,
-    bodyLength=bodyLength,
-    earLength=40 - 6.15
+    bodyLength=testerBodyLength,
+    earLength=earLength
   );
+if (false)
 translate([0, 0, -2])
 color("blue")
 linear_extrude(1)
-  earCutout(tipRadius * 2, earAngel/2);
+  earCutout(tipRadius * 2, earAngle/2);

@@ -4,9 +4,10 @@ use <donut.scad>;
 use <../earpiece.scad>;
 use <../frameConnector.scad>;
 
-// measured old 133
-autozoneEarLength = 118;
-bannyEarLength = 118;
+oldautozoneEarLength = 108;
+autozoneEarLength = oldautozoneEarLength + 14.1731;
+oldBannyEarLength = 118;
+bannyEarpieceLength = 118 + 14.1731;
 // TODO: Single source of truth
 frameThickness = 3;
 connectorPinRadius = .7;
@@ -15,7 +16,7 @@ module earpieceConnector(
     earpieceConnectorThickness=4.1,
     radius,
     innerRadius,
-    bodyLength=bannyEarLength,
+    bodyLength=bannyEarpieceLength,
     bodyThickness=3,
     clearance = 0.25,
 ) {
@@ -26,15 +27,18 @@ module earpieceConnector(
             innerRadius=innerRadius
         ) {
             zcenter = -earpieceConnectorThickness / 2;
-            translate([bodyLength - radius, 0, 0])
+            tipRadius = 6.15;
+            earLength = 40 - tipRadius;
+            earAngle = 45;
+            translate([bodyLength - (earLength * cos(earAngle) - tipRadius * 1.2), 0, 0])
             rotate([-90,0,0])
             mirror([1,0,0])
             linear_extrude(bodyThickness)
             earpiece(
-                tipRadius=6.15,
+                tipRadius=tipRadius,
                 bodyLength=bodyLength,
-                earLength=40 - 6.15,
-                earAngle=45
+                earLength=earLength,
+                earAngle=earAngle
             );
         }
         cylinder(r=radius + clearance, h=earpieceConnectorThickness + clearance, center=true);
@@ -44,10 +48,9 @@ module earpieceConnector(
 }
 
 rotate([270,0,0])
-//mirrorCopy([1,0,0])
 mirrorCopy([0,0,1])
-translate([5,0,7])
-    earpieceConnector(
+translate([0,0,7])
+earpieceConnector(
     bodyLength=autozoneEarLength,
     radius=frameThickness * .8,
     innerRadius=connectorPinRadius
