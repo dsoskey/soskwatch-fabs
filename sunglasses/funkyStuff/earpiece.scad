@@ -3,6 +3,7 @@ use <mirrorCopy.scad>;
 use <donut.scad>;
 use <../earpiece.scad>;
 use <../frameConnector.scad>;
+use <../../branding/skeyMark.scad>;
 
 oldautozoneEarLength = 108;
 autozoneEarLength = oldautozoneEarLength + 14.1731;
@@ -16,6 +17,7 @@ module earpieceConnector(
     earpieceConnectorThickness=4.1,
     radius,
     innerRadius,
+    showMark,
     bodyLength=bannyEarpieceLength,
     bodyThickness=3,
     clearance = 0.25,
@@ -30,16 +32,23 @@ module earpieceConnector(
             tipRadius = 6.15;
             earLength = 40 - tipRadius;
             earAngle = 45;
-            translate([bodyLength - (earLength * cos(earAngle) - tipRadius * 1.2), 0, 0])
-            rotate([-90,0,0])
-            mirror([1,0,0])
-            linear_extrude(bodyThickness)
-            earpiece(
-                tipRadius=tipRadius,
-                bodyLength=bodyLength,
-                earLength=earLength,
-                earAngle=earAngle
-            );
+            difference() {
+                translate([bodyLength - (earLength * cos(earAngle) - tipRadius * 1.2), 0, 0])
+                rotate([-90,0,0])
+                mirror([1,0,0])
+                linear_extrude(bodyThickness)
+                    earpiece(
+                        tipRadius=tipRadius,
+                        bodyLength=bodyLength,
+                        earLength=earLength,
+                        earAngle=earAngle
+                    );
+                if (showMark)
+                    translate([bodyLength + tipRadius * 1.15, bodyThickness + .1, earLength * sin(earAngle)])
+                    rotate([-90,0,180])
+                linear_extrude(bodyThickness/2)
+                    skeyMark(1);
+            }
         }
         cylinder(r=radius + clearance, h=earpieceConnectorThickness + clearance, center=true);
         rotate([0, 0, 15])
@@ -47,11 +56,20 @@ module earpieceConnector(
     }
 }
 
-rotate([270,0,0])
-mirrorCopy([0,0,1])
-translate([0,0,7])
-earpieceConnector(
-    bodyLength=autozoneEarLength,
-    radius=frameThickness * .8,
-    innerRadius=connectorPinRadius
-);
+rotate([270,0,0]){
+    translate([0,0,7])
+    earpieceConnector(
+        bodyLength=bannyEarpieceLength,
+        radius=frameThickness * .8,
+        innerRadius=connectorPinRadius
+    );
+    translate([0,0, -7])
+    mirror([0,0,1])
+    earpieceConnector(
+        bodyLength=bannyEarpieceLength,
+        radius=frameThickness * .8,
+        innerRadius=connectorPinRadius,
+        showMark=true
+    );
+
+}

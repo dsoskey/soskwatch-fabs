@@ -2,11 +2,12 @@ include <config/3DPrinter.scad>;
 include <BOSL2/std.scad>;
 use <mirrorCopy.scad>;
 use <donut.scad>;
-
+use <hedron.scad>;
 use <framePoints.scad>;
 use <earpiece.scad>;
 use <../frameConnector.scad>;
-use <../lensInset.scad>;
+use <../lens/lensInset.scad>;
+use <../lens/stencil.scad>;
 
 module reference() {
   color("blue")
@@ -113,3 +114,8 @@ rotate([assembled ? 90 : 180, 0, 90]) {
         radius=.125
       );
 }
+
+if (false)
+lensStencil(
+  lensPoints = offsetF(framePoints, r=-frameThickness)
+);
