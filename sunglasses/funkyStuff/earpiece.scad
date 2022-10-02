@@ -1,24 +1,24 @@
 include <config/3DPrinter.scad>;
 use <mirrorCopy.scad>;
 use <donut.scad>;
+use <undef.scad>;
 use <../earpiece.scad>;
 use <../frameConnector.scad>;
 use <../../branding/skeyMark.scad>;
 
-oldautozoneEarLength = 108;
-autozoneEarLength = oldautozoneEarLength + 14.1731;
-oldBannyEarLength = 118;
-bannyEarpieceLength = 118 + 14.1731;
-// TODO: Single source of truth
-frameThickness = 3;
-connectorPinRadius = .7;
+autozoneEarLength = 122.1731;
+bannyEarpieceLength = 132.1731;
+
+_earpieceLength = default(earpieceLength, 132.1731);
+_frameThickness = default(frameThickness, 3);
+_connectorPinRadius = default(connectorPinRadius, .7);
 
 module earpieceConnector(
     earpieceConnectorThickness=4.1,
     radius,
     innerRadius,
     showMark,
-    bodyLength=bannyEarpieceLength,
+    bodyLength,
     bodyThickness=3,
     clearance = 0.25,
 ) {
@@ -56,19 +56,20 @@ module earpieceConnector(
     }
 }
 
+color("limegreen")
 rotate([270,0,0]){
     translate([0,0,7])
     earpieceConnector(
-        bodyLength=bannyEarpieceLength,
-        radius=frameThickness * .8,
-        innerRadius=connectorPinRadius
+        bodyLength=_earpieceLength,
+        radius=_frameThickness * .8,
+        innerRadius=_connectorPinRadius
     );
     translate([0,0, -7])
     mirror([0,0,1])
     earpieceConnector(
-        bodyLength=bannyEarpieceLength,
-        radius=frameThickness * .8,
-        innerRadius=connectorPinRadius,
+        bodyLength=_earpieceLength,
+        radius=_frameThickness * .8,
+        innerRadius=_connectorPinRadius,
         showMark=true
     );
 

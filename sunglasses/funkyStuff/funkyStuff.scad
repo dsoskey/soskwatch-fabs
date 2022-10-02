@@ -9,11 +9,6 @@ use <../frameConnector.scad>;
 use <../lens/lensInset.scad>;
 use <../lens/stencil.scad>;
 
-module reference() {
-  color("blue")
-  import("../DG_Frame_1_v2_v_rebuilt.stl");
-}
-
 module funkyStuff(
   framePoints,
   nosePoints,
@@ -26,7 +21,7 @@ module funkyStuff(
 ) {
   noseTop = nosePoints[0][1];
   bridgeTop = frameTopY() - 1.5;
-  bridgeBottom = bridgeTop - frameThickness;
+  bridgeBottom = bridgeTop - _frameThickness;
   bridgePoints = [
     [0, bridgeTop],
     [framePoints[1][0], bridgeTop],
@@ -45,7 +40,11 @@ module funkyStuff(
       frameConnector(radius=connectorRadius, width=4.1, innerRadius=connectorPinRadius);
       if (showEarpiece)
         color(frameColor)
-        earpieceConnector(radius=connectorRadius, innerRadius=connectorPinRadius);
+        earpieceConnector(
+          bodyLength=120,
+          radius=connectorRadius,
+          innerRadius=connectorPinRadius
+        );
     }
 
     difference() {
@@ -73,14 +72,15 @@ module funkyStuff(
   }
 }
 
-assembled = false;
+_frameThickness = default(frameThickness, 3);
+_connectorPinRadius = default(connectorPinRadius, .7);
+assembled = true;
 noseWidth = 8;
 noseHeight = 20;
-frameThickness = 3;
 length = 143.6;
 height = 53.5;
 zThickness = 4;
-connectorPinRadius = .7;
+
 
 nosePoints = generateNosePoints(
   noseWidth = noseWidth
@@ -99,7 +99,7 @@ rotate([assembled ? 90 : 180, 0, 90]) {
   funkyStuff(
     framePoints=framePoints,
     nosePoints=nosePoints,
-    frameThickness=frameThickness,
+    frameThickness=_frameThickness,
     connectorPinRadius=connectorPinRadius,
     zThickness=zThickness,
     showEarpiece=assembled
@@ -110,12 +110,10 @@ rotate([assembled ? 90 : 180, 0, 90]) {
   color("Gold",.4)
     translate([0, 0, (zThickness)/2])
       lensInset(
-        framePoints=offsetF(framePoints, r=-frameThickness),
+        framePoints=offsetF(framePoints, r=-_frameThickness),
         radius=.125
       );
 }
 
 if (false)
-lensStencil(
-  lensPoints = offsetF(framePoints, r=-frameThickness)
-);
+lensStencil(lensPoints = offsetF(framePoints, r=-_frameThickness));
