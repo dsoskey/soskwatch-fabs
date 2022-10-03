@@ -1,4 +1,4 @@
-w# funky stuff
+# funky stuff
 
 ![](./screenshot.png)
 

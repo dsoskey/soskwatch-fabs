@@ -7,7 +7,6 @@ use <framePoints.scad>;
 use <earpiece.scad>;
 use <../frameConnector.scad>;
 use <../lens/lensInset.scad>;
-use <../lens/stencil.scad>;
 
 module funkyStuff(
   framePoints,
@@ -74,24 +73,21 @@ module funkyStuff(
 
 _frameThickness = default(frameThickness, 3);
 _connectorPinRadius = default(connectorPinRadius, .7);
-assembled = true;
-noseWidth = 8;
-noseHeight = 20;
-length = 143.6;
-height = 53.5;
-zThickness = 4;
+_noseWidth = default(noseWidth, 8);
+_noseHeight = default(noseHeight, 20);
+_frameLength = default(frameLength, 143.6);
+_frameHeight = default(frameHeight, 53.5);
+_zThickness = default(zThickness, 4);
 
-
-nosePoints = generateNosePoints(
-  noseWidth = noseWidth
-);
+assembled = false;
+nosePoints = generateNosePoints(noseWidth = _noseWidth);
 
 framePoints = generateFramePoints(
-  length = length,
-  height = height,
+  length = _frameLength,
+  height = _frameHeight,
   nosePoints = nosePoints,
-  noseHeight = noseHeight,
-  noseWidth = noseWidth
+  noseHeight = _noseHeight,
+  noseWidth = _noseWidth
 );
 
 translate([0, 0, 1])
@@ -100,8 +96,8 @@ rotate([assembled ? 90 : 180, 0, 90]) {
     framePoints=framePoints,
     nosePoints=nosePoints,
     frameThickness=_frameThickness,
-    connectorPinRadius=connectorPinRadius,
-    zThickness=zThickness,
+    connectorPinRadius=_connectorPinRadius,
+    zThickness=_zThickness,
     showEarpiece=assembled
   );
 
@@ -114,6 +110,3 @@ rotate([assembled ? 90 : 180, 0, 90]) {
         radius=.125
       );
 }
-
-if (false)
-lensStencil(lensPoints = offsetF(framePoints, r=-_frameThickness));
