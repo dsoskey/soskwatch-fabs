@@ -28,7 +28,7 @@ openscad -o earpiece.stl ./my-config.scad
 
 ## Printing
 
-`TODO: add earpiece and frame cura profiles`
+I've included my personal Cura profiles that I've developed during this project. I recommend adjusting the hot end and bed temperatures to match your specific PETG brand.
 
 ## Lens
 
