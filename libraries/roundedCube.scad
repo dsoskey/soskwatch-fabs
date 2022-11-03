@@ -1,46 +1,50 @@
 include <config/3DPrinter.scad>;
 
-module cubeOfSpheres(
-  cubeSize,
-  cornerRadius,
-) {
-  sphereCenter = (cubeSize - cornerRadius)/2;
+module cubeOfSpheres(size, cornerRadius) {
+  x = is_list(size) ? size.x : size;
+  sphereCenterX = (x - cornerRadius)/2;
 
-  translate([sphereCenter, sphereCenter, sphereCenter])
+  y = is_list(size) ? size.y : size;
+  sphereCenterY = (y - cornerRadius)/2;
+
+  z = is_list(size) ? size.z : size;
+  sphereCenterZ = (z - cornerRadius)/2;
+
+  translate([sphereCenterX, sphereCenterY, sphereCenterZ])
   sphere(r=cornerRadius);
-  translate([sphereCenter, -sphereCenter, sphereCenter])
+  translate([sphereCenterX, -sphereCenterY, sphereCenterZ])
   sphere(r=cornerRadius);
-  translate([sphereCenter, sphereCenter, -sphereCenter])
+  translate([sphereCenterX, sphereCenterY, -sphereCenterZ])
   sphere(r=cornerRadius);
-  translate([sphereCenter, -sphereCenter, -sphereCenter])
+  translate([sphereCenterX, -sphereCenterY, -sphereCenterZ])
   sphere(r=cornerRadius);
-  translate([-sphereCenter, sphereCenter, sphereCenter])
+  translate([-sphereCenterX, sphereCenterY, sphereCenterZ])
   sphere(r=cornerRadius);
-  translate([-sphereCenter, -sphereCenter, sphereCenter])
+  translate([-sphereCenterX, -sphereCenterY, sphereCenterZ])
   sphere(r=cornerRadius);
-  translate([-sphereCenter, sphereCenter, -sphereCenter])
+  translate([-sphereCenterX, sphereCenterY, -sphereCenterZ])
   sphere(r=cornerRadius);
-  translate([-sphereCenter, -sphereCenter, -sphereCenter])
+  translate([-sphereCenterX, -sphereCenterY, -sphereCenterZ])
   sphere(r=cornerRadius);
 }
 
 module roundedCube(
-  cubeSize = 15,
+  size = 15,
   cornerRadius = 1,
 ) {
   hull()
-  cubeOfSpheres(cubeSize, cornerRadius);
+  cubeOfSpheres(size, cornerRadius);
 }
 
-
 module etchedCube(
-  cubeSize = 15,
+  size = 15,
   cornerRadius = 1,
 ) {
-  etchDepth = cubeSize/10;
-  etchZ = (cubeSize+cornerRadius)/2 - etchDepth;
+  assert(!is_list(size), "etched cube is not designed for size lists");
+  etchDepth = size/10;
+  etchZ = (size+cornerRadius)/2 - etchDepth;
   difference() {
-    roundedCube(cubeSize=cubeSize, cornerRadius=cornerRadius);
+    roundedCube(size=size, cornerRadius=cornerRadius);
 
     translate([0, 0, etchZ])
     linear_extrude(etchDepth)
@@ -73,13 +77,13 @@ module etchedCube(
 }
 
 module dotDie(
-  cubeSize = 15,
+  size = 15,
   cornerRadius = 1,
 ) {
-  dotSize = cubeSize / 10;
+  dotSize = size / 10;
   dotSpacing = 4.5;
 
-  etchedCube(cubeSize, cornerRadius) {
+  etchedCube(size, cornerRadius) {
     children();
     union() {
       translate([dotSpacing,dotSpacing,0])
@@ -132,6 +136,6 @@ module dotDie(
   }
 }
 
-roundedCube();
+roundedCube(size=[1,15,50]);
 translate([20, 0, 0])
   cubeOfSpheres(15, 1);
