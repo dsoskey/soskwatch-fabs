@@ -16,12 +16,12 @@ bowlRadius = 7.25,
                     square(size = [outerRadius / 1.5, outerRadius], center = true);
             }
 
-            translate([- outerRadius * 1.2, 0])
-                square(size = [outerRadius, outerRadius], center = true);
+            translate([- outerRadius * 1.4, 0])
+                square(size = [outerRadius*1.2, outerRadius], center = true);
 
             translate([bowlXOffset, 0])
                 difference() {
-                    circle(r = outerRadius);
+                    circle(r = bowlRadius * 2.5);
                     circle(r = bowlRadius);
                 }
         }
@@ -32,4 +32,10 @@ bowlRadius = 7.25,
 
 }
 
+// hookah
+if(false)
 hookahBowlHolder();
+
+// trixie bongalina
+//if(false)
+hookahBowlHolder(hookahRadius = 32.1/2, bowlRadius = 7.5);
