@@ -17,7 +17,7 @@ bowlRadius = 7.25,
             }
 
             translate([- outerRadius * 1.4, 0])
-                square(size = [outerRadius*1.2, outerRadius], center = true);
+                square(size = [outerRadius*1.2, outerRadius * .75], center = true);
 
             translate([bowlXOffset, 0])
                 difference() {
@@ -37,5 +37,8 @@ if(false)
 hookahBowlHolder();
 
 // trixie bongalina
-//if(false)
+if(false)
 hookahBowlHolder(hookahRadius = 32.1/2, bowlRadius = 7.5);
+
+// Ptad Ptaradise
+hookahBowlHolder(hookahRadius = 32/2, bowlRadius = 12/2);
